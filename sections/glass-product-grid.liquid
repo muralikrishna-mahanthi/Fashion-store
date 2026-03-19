@@ -1,0 +1,244 @@
+{%- style -%}
+  .glass-products-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background: {{ section.settings.bg_color }};
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .glass-card__image {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    border-radius: 10px;
+    transition: transform 0.5s ease;
+  }
+
+  .glass-card:hover .glass-card__image {
+    transform: scale(1.1);
+  }
+
+  .glass-card__info {
+    margin-top: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .glass-card__title {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .glass-card__price {
+    font-size: 1.6rem;
+    opacity: 0.8;
+  }
+
+  .glass-card__button {
+    margin-top: 1rem;
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+  }
+
+  .glass-card__button:hover {
+    background: #e0e0e0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .glass-card {
+      padding: 15px;
+    }
+    .glass-card__image {
+      height: 200px;
+    }
+  }
+
+  /* Grid Layout */
+  .glass-grid {
+    display: grid;
+    gap: 30px;
+  }
+
+  .glass-grid--desktop-{{ section.settings.columns_desktop }} {
+    grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+  }
+
+  @media screen and (max-width: 749px) {
+    .glass-grid {
+      grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
+      gap: 15px;
+    }
+  }
+
+{%- endstyle -%}
+
+<div class="glass-products-{{ section.id }}">
+  <div class="page-width">
+    {%- if section.settings.title != blank -%}
+      <h2 class="h1" style="color: #fff; margin-bottom: 2rem; text-align: {{ section.settings.heading_alignment }};">
+        {{ section.settings.title }}
+      </h2>
+    {%- endif -%}
+
+    <div class="glass-grid glass-grid--desktop-{{ section.settings.columns_desktop }}">
+      {%- assign collection = collections[section.settings.collection] -%}
+      {%- if collection != blank -%}
+        {%- for product in collection.products limit: section.settings.products_to_show -%}
+          <div class="glass-card" {{ block.shopify_attributes }}>
+            <a href="{{ product.url }}" style="text-decoration: none;">
+              {% if product.featured_media != blank %}
+                <img src="{{ product.featured_media | image_url: width: 600 }}" class="glass-card__image" loading="lazy" alt="{{ product.title }}">
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'glass-card__image' }}
+              {% endif %}
+            </a>
+            <div class="glass-card__info">
+              <a href="{{ product.url }}" class="glass-card__title">{{ product.title }}</a>
+              <div class="glass-card__price">{{ product.price | money }}</div>
+              <form method="post" action="/cart/add">
+                <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                <button type="submit" class="glass-card__button">Quick Add</button>
+              </form>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..section.settings.products_to_show) -%}
+          <div class="glass-card">
+            {{ 'product-' | append: i | placeholder_svg_tag: 'glass-card__image' }}
+            <div class="glass-card__info">
+              <h3 class="glass-card__title">Sample Product {{ i }}</h3>
+              <div class="glass-card__price">$99.00</div>
+              <button class="glass-card__button">Quick Add</button>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Glass Product Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured Items"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "Products to show"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "label": "Columns Desktop"
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 1,
+      "label": "Columns Mobile"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Glass Product Grid"
+    }
+  ]
+}
+{% endschema %}

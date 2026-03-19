@@ -1,0 +1,493 @@
+/* ======================================
+   GLASS UI — Full System
+   Glass Search, Nav Menu, Cart Popup
+   ====================================== */
+
+/* ── Body lock when popup open ── */
+body.glass-popup-open {
+  overflow: hidden;
+}
+
+/* ══════════════════════════════════════
+   GLASS OVERLAY (shared base for all)
+   ══════════════════════════════════════ */
+.glass-overlay {
+  position: fixed;
+  inset: 10px;               /* 10px from all sides */
+  z-index: 10000;
+  border-radius: 18px;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.97) translateY(8px);
+  transition:
+    opacity 0.55s cubic-bezier(0.23, 1, 0.32, 1),
+    transform 0.55s cubic-bezier(0.23, 1, 0.32, 1),
+    visibility 0.55s;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.glass-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translateY(0);
+}
+
+/* Dark dim backdrop behind the overlay */
+.glass-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s ease, visibility 0.45s;
+}
+
+.glass-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Close Button ── */
+.glass-close-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  z-index: 10;
+  line-height: 1;
+}
+
+.glass-close-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: rotate(90deg);
+}
+
+/* ══════════════════════════════════════
+   HEADER ICON OVERRIDES (Search + Cart)
+   ══════════════════════════════════════ */
+
+/* Hide default search modal trigger, replaced by our button */
+.glass-header .header__search {
+  display: contents;
+}
+
+/* Icon button base */
+.glass-icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: opacity 0.3s ease;
+  text-decoration: none;
+}
+
+.glass-icon-btn:hover {
+  opacity: 0.7;
+}
+
+/* New SVG icons */
+.glass-icon-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ══════════════════════════════════════
+   SEARCH POPUP
+   ══════════════════════════════════════ */
+#glass-search-overlay .glass-overlay__inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+}
+
+.glass-search-label {
+  font-size: 1.1rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 2.5rem;
+}
+
+.glass-search-field {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 12px;
+  gap: 16px;
+}
+
+.glass-search-field svg {
+  width: 24px;
+  height: 24px;
+  stroke: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.glass-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 2.8rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.glass-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.glass-search-hints {
+  margin-top: 3rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.glass-search-hint {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 6px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.glass-search-hint:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ══════════════════════════════════════
+   NAV MENU POPUP
+   ══════════════════════════════════════ */
+#glass-nav-overlay .glass-overlay__inner {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 80px 60px 60px;
+  gap: 60px;
+}
+
+.glass-nav-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.glass-nav-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.glass-nav-links-list li {
+  overflow: hidden;
+}
+
+.glass-nav-link {
+  display: block;
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  font-weight: 300;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  padding: 8px 0;
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease,
+    color 0.3s ease;
+}
+
+.glass-nav-link:hover {
+  color: rgba(255, 255, 255, 0.5);
+  padding-left: 12px;
+}
+
+/* Staggered entrance when open */
+#glass-nav-overlay.is-open .glass-nav-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#glass-nav-overlay.is-open .glass-nav-links-list li:nth-child(1) .glass-nav-link { transition-delay: 0.1s; }
+#glass-nav-overlay.is-open .glass-nav-links-list li:nth-child(2) .glass-nav-link { transition-delay: 0.17s; }
+#glass-nav-overlay.is-open .glass-nav-links-list li:nth-child(3) .glass-nav-link { transition-delay: 0.24s; }
+#glass-nav-overlay.is-open .glass-nav-links-list li:nth-child(4) .glass-nav-link { transition-delay: 0.31s; }
+#glass-nav-overlay.is-open .glass-nav-links-list li:nth-child(5) .glass-nav-link { transition-delay: 0.38s; }
+#glass-nav-overlay.is-open .glass-nav-links-list li:nth-child(6) .glass-nav-link { transition-delay: 0.45s; }
+#glass-nav-overlay.is-open .glass-nav-links-list li:nth-child(7) .glass-nav-link { transition-delay: 0.52s; }
+#glass-nav-overlay.is-open .glass-nav-links-list li:nth-child(8) .glass-nav-link { transition-delay: 0.59s; }
+
+.glass-nav-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 32px;
+}
+
+.glass-nav-tagline {
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease 0.45s, transform 0.6s ease 0.45s;
+}
+
+#glass-nav-overlay.is-open .glass-nav-tagline {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.glass-nav-socials {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.glass-nav-social-link {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1.2rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transition: color 0.3s ease;
+}
+
+.glass-nav-social-link:hover {
+  color: #fff;
+}
+
+/* ══════════════════════════════════════
+   CART POPUP
+   ══════════════════════════════════════ */
+#glass-cart-overlay .glass-overlay__inner {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 50px 50px 40px;
+}
+
+.glass-cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 24px;
+}
+
+.glass-cart-title {
+  font-size: 1.3rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 400;
+}
+
+.glass-cart-count {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.glass-cart-items {
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+.glass-cart-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#glass-cart-overlay.is-open .glass-cart-item {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+#glass-cart-overlay.is-open .glass-cart-item:nth-child(1) { transition-delay: 0.1s; }
+#glass-cart-overlay.is-open .glass-cart-item:nth-child(2) { transition-delay: 0.18s; }
+#glass-cart-overlay.is-open .glass-cart-item:nth-child(3) { transition-delay: 0.26s; }
+#glass-cart-overlay.is-open .glass-cart-item:nth-child(4) { transition-delay: 0.34s; }
+
+.glass-cart-item__img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+}
+
+.glass-cart-item__name {
+  font-size: 1.4rem;
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.glass-cart-item__variant {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.glass-cart-item__price {
+  font-size: 1.4rem;
+  color: #fff;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.glass-cart-footer {
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-cart-subtotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.glass-cart-checkout-btn {
+  width: 100%;
+  padding: 18px;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.35s ease, transform 0.35s ease;
+}
+
+.glass-cart-checkout-btn:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.glass-cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: rgba(255,255,255,0.35);
+  font-size: 1.6rem;
+  gap: 12px;
+}
+
+/* ══════════════════════════════════════
+   MOBILE RESPONSIVENESS
+   ══════════════════════════════════════ */
+@media screen and (max-width: 749px) {
+  .glass-overlay {
+    inset: 6px;
+    border-radius: 14px;
+  }
+
+  #glass-nav-overlay .glass-overlay__inner {
+    grid-template-columns: 1fr;
+    padding: 70px 30px 40px;
+    gap: 30px;
+  }
+
+  .glass-nav-right {
+    align-items: flex-start;
+  }
+
+  .glass-nav-link {
+    font-size: clamp(2.4rem, 7vw, 3.6rem);
+  }
+
+  #glass-search-overlay .glass-overlay__inner {
+    padding: 40px 24px;
+  }
+
+  .glass-search-input {
+    font-size: 2rem;
+  }
+
+  #glass-cart-overlay .glass-overlay__inner {
+    padding: 50px 24px 30px;
+  }
+
+  .glass-cart-item {
+    grid-template-columns: 60px 1fr auto;
+    gap: 12px;
+  }
+
+  .glass-cart-item__img {
+    width: 60px;
+    height: 60px;
+  }
+}

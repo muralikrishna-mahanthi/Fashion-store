@@ -1,0 +1,678 @@
+{%- style -%}
+  .lux-footer-{{ section.id }} {
+    background: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .lux-footer-{{ section.id }} a {
+    color: {{ section.settings.link_color }};
+    text-decoration: none;
+    transition: color 0.35s ease, opacity 0.35s ease;
+  }
+
+  .lux-footer-{{ section.id }} a:hover {
+    opacity: 0.55;
+  }
+
+  @media screen and (max-width: 749px) {
+    .lux-footer-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | times: 0.65 | round: 0 }}px;
+    }
+  }
+{%- endstyle -%}
+
+<style>
+  /* ── Animated marquee bar ── */
+  .lux-footer__marquee {
+    width: 100%;
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 18px 0;
+    margin-bottom: 80px;
+  }
+
+  .lux-footer__marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: footerMarquee 30s linear infinite;
+  }
+
+  .lux-footer__marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 40px;
+    padding-right: 80px;
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.3;
+  }
+
+  .lux-footer__marquee-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    display: inline-block;
+    opacity: 0.5;
+  }
+
+  @keyframes footerMarquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── Main Grid ── */
+  .lux-footer__grid {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr 1fr 1fr;
+    gap: 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+
+  @media screen and (max-width: 989px) {
+    .lux-footer__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 0 2rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .lux-footer__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 0 2rem;
+    }
+  }
+
+  /* ── Brand Column ── */
+  .lux-footer__brand-name {
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .lux-footer__brand-name.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .lux-footer__brand-desc {
+    font-size: 1.4rem;
+    line-height: 1.7;
+    opacity: 0.5;
+    max-width: 300px;
+    margin-bottom: 2.5rem;
+  }
+
+  /* Social icons strip */
+  .lux-footer__socials {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .lux-footer__social-link {
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+  }
+
+  .lux-footer__social-link:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.4);
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+
+  .lux-footer__social-link svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── Nav Column ── */
+  .lux-footer__col-heading {
+    font-size: 1rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-bottom: 2rem;
+    font-weight: 400;
+  }
+
+  .lux-footer__nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .lux-footer__nav-link {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    transition: transform 0.35s ease;
+    display: inline-block;
+  }
+
+  .lux-footer__nav-link:hover {
+    transform: translateX(6px);
+    opacity: 0.6;
+  }
+
+  /* Scroll reveal for nav items */
+  .lux-footer__nav-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .lux-footer__nav-item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Newsletter ── */
+  .lux-footer__newsletter-form {
+    margin-top: 1.5rem;
+    display: flex;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    gap: 12px;
+    padding-bottom: 10px;
+  }
+
+  .lux-footer__newsletter-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: inherit;
+    font-size: 1.4rem;
+    padding: 6px 0;
+    opacity: 0.8;
+  }
+
+  .lux-footer__newsletter-input::placeholder {
+    color: currentColor;
+    opacity: 0.3;
+  }
+
+  .lux-footer__newsletter-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    transition: transform 0.35s ease;
+    opacity: 0.7;
+  }
+
+  .lux-footer__newsletter-btn:hover {
+    transform: translateX(4px);
+    opacity: 1;
+  }
+
+  .lux-footer__newsletter-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── Divider ── */
+  .lux-footer__divider {
+    max-width: 1400px;
+    margin: 60px auto 0;
+    padding: 0 4rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  @media screen and (max-width: 749px) {
+    .lux-footer__divider { padding: 0 2rem; }
+  }
+
+  /* ── Bottom Bar ── */
+  .lux-footer__bottom {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .lux-footer__copyright {
+    font-size: 1.2rem;
+    opacity: 0.35;
+    letter-spacing: 0.05em;
+  }
+
+  .lux-footer__policies {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .lux-footer__policy-link {
+    font-size: 1.2rem;
+    opacity: 0.35;
+    letter-spacing: 0.03em;
+  }
+
+  .lux-footer__policy-link:hover {
+    opacity: 0.7;
+  }
+
+  .lux-footer__payment {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .lux-footer__payment .list-payment__item {
+    list-style: none;
+  }
+
+  .lux-footer__payment .icon {
+    height: 24px;
+    width: auto;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+  }
+
+  .lux-footer__payment .icon:hover {
+    opacity: 0.8;
+  }
+
+  @media screen and (max-width: 749px) {
+    .lux-footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 24px 2rem;
+    }
+    .lux-footer__marquee { margin-bottom: 50px; }
+  }
+
+  /* ── Big brand name watermark at bottom ── */
+  .lux-footer__wordmark {
+    text-align: center;
+    padding: 20px 0 0;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    line-height: 0.85;
+  }
+
+  .lux-footer__wordmark span {
+    font-size: clamp(8rem, 18vw, 20rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    opacity: 0.04;
+    display: block;
+  }
+</style>
+
+<footer class="lux-footer-{{ section.id }}">
+  {%- if section.settings.show_marquee -%}
+    <div class="lux-footer__marquee">
+      <div class="lux-footer__marquee-track">
+        {%- assign marquee_text = section.settings.marquee_text | split: '|' -%}
+        {%- for i in (1..4) -%}
+          {%- for item in marquee_text -%}
+            <div class="lux-footer__marquee-item">
+              <span>{{ item | strip }}</span>
+              <span class="lux-footer__marquee-dot"></span>
+            </div>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <!-- Main Grid -->
+  <div class="lux-footer__grid">
+    <!-- Brand Column -->
+    <div class="lux-footer__brand">
+      {%- if settings.logo != blank -%}
+        <div style="margin-bottom: 2rem;">
+          {{ settings.logo | image_url: width: 300 | image_tag: loading: 'lazy', style: 'height: 40px; width: auto;' }}
+        </div>
+      {%- else -%}
+        <div class="lux-footer__brand-name js-footer-reveal">{{ shop.name }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.brand_desc != blank -%}
+        <p class="lux-footer__brand-desc">{{ section.settings.brand_desc }}</p>
+      {%- endif -%}
+
+      <!-- Socials -->
+      <div class="lux-footer__socials">
+        {%- if settings.social_instagram_link != blank -%}
+          <a href="{{ settings.social_instagram_link }}" class="lux-footer__social-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_facebook_link != blank -%}
+          <a href="{{ settings.social_facebook_link }}" class="lux-footer__social-link" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_tiktok_link != blank -%}
+          <a href="{{ settings.social_tiktok_link }}" class="lux-footer__social-link" aria-label="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_youtube_link != blank -%}
+          <a href="{{ settings.social_youtube_link }}" class="lux-footer__social-link" aria-label="YouTube">
+            <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.95C18.88 4 12 4 12 4s-6.88 0-8.59.47a2.78 2.78 0 0 0-1.95 1.95A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.5C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_twitter_link != blank -%}
+          <a href="{{ settings.social_twitter_link }}" class="lux-footer__social-link" aria-label="Twitter">
+            <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_pinterest_link != blank -%}
+          <a href="{{ settings.social_pinterest_link }}" class="lux-footer__social-link" aria-label="Pinterest">
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.59 19.31c-.07-.62-.13-1.59.03-2.27l.95-4.04s-.24-.49-.24-1.21c0-1.14.66-1.98 1.49-1.98.7 0 1.04.53 1.04 1.16 0 .71-.45 1.77-.68 2.75-.19.82.41 1.49 1.21 1.49 1.45 0 2.56-1.52 2.56-3.73 0-1.95-1.4-3.31-3.4-3.31a3.73 3.73 0 0 0-3.91 3.73c0 .74.28 1.53.64 1.96a.26.26 0 0 1 .06.24c-.07.26-.21.82-.24.94-.04.14-.12.17-.28.1-1.05-.49-1.71-2.02-1.71-3.26 0-2.65 1.92-5.08 5.54-5.08 2.91 0 5.17 2.07 5.17 4.84 0 2.88-1.82 5.2-4.34 5.2-.85 0-1.64-.44-1.91-.96l-.52 1.94c-.19.72-.69 1.62-1.03 2.17A10 10 0 1 0 12 2z"/></svg>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Nav blocks from schema blocks -->
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'nav_column' -%}
+          <div class="lux-footer__col" {{ block.shopify_attributes }}>
+            {%- if block.settings.heading != blank -%}
+              <h3 class="lux-footer__col-heading">{{ block.settings.heading }}</h3>
+            {%- endif -%}
+            {%- if block.settings.menu != blank -%}
+              <ul class="lux-footer__nav-list">
+                {%- for link in block.settings.menu.links -%}
+                  <li class="lux-footer__nav-item js-footer-nav-item">
+                    <a href="{{ link.url }}" class="lux-footer__nav-link">{{ link.title }}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        {%- when 'newsletter_col' -%}
+          <div class="lux-footer__col" {{ block.shopify_attributes }}>
+            {%- if block.settings.heading != blank -%}
+              <h3 class="lux-footer__col-heading">{{ block.settings.heading }}</h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p style="font-size: 1.4rem; opacity: 0.5; line-height: 1.7; margin-bottom: 1.5rem;">{{ block.settings.text }}</p>
+            {%- endif -%}
+            {%- form 'customer', id: 'LuxFooterNewsletter', class: 'footer__newsletter' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div class="lux-footer__newsletter-form">
+                <input
+                  type="email"
+                  name="contact[email]"
+                  class="lux-footer__newsletter-input"
+                  placeholder="{{ block.settings.placeholder | default: 'Your email' }}"
+                  required
+                >
+                <button type="submit" class="lux-footer__newsletter-btn" aria-label="Subscribe">
+                  <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+              </div>
+              {%- if form.posted_successfully? -%}
+                <p style="font-size: 1.2rem; opacity: 0.6; margin-top: 1rem;">✓ Thank you for subscribing.</p>
+              {%- endif -%}
+            {%- endform -%}
+          </div>
+        {%- when '@app' -%}
+          {% render block %}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+
+  <!-- Wordmark -->
+  {%- if section.settings.show_wordmark -%}
+    <div class="lux-footer__wordmark">
+      <span>{{ section.settings.wordmark_text | default: shop.name }}</span>
+    </div>
+  {%- endif -%}
+
+  <div class="lux-footer__divider"></div>
+
+  <!-- Bottom Bar -->
+  <div class="lux-footer__bottom">
+    <p class="lux-footer__copyright">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }}. All rights reserved.
+    </p>
+    {%- if section.settings.show_policy -%}
+      <ul class="lux-footer__policies" style="list-style:none; padding:0; margin:0;">
+        {%- for policy in shop.policies -%}
+          {%- if policy != blank -%}
+            <li><a href="{{ policy.url }}" class="lux-footer__policy-link">{{ policy.title }}</a></li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+    {%- if section.settings.show_payment_icons -%}
+      <ul class="lux-footer__payment list list-payment" role="list" style="list-style:none; padding:0; margin:0; display:flex; gap:8px; flex-wrap:wrap;">
+        {%- for type in shop.enabled_payment_types -%}
+          <li class="list-payment__item">{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</footer>
+
+<script>
+(function() {
+  // Scroll reveal for footer elements
+  const revealEls = document.querySelectorAll('.js-footer-reveal, .js-footer-nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // stagger
+        const delay = Array.from(revealEls).indexOf(entry.target) * 60;
+        setTimeout(() => {
+          entry.target.classList.add('is-visible');
+        }, delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  revealEls.forEach(el => observer.observe(el));
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Luxury Footer",
+  "class": "lux-footer-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_desc",
+      "label": "Brand Description",
+      "default": "Curated fashion for those who dare to stand out. Quality meets artistry in every piece."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wordmark",
+      "label": "Show Large Wordmark Watermark",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "wordmark_text",
+      "label": "Wordmark Text (defaults to shop name)",
+      "placeholder": "INO"
+    },
+    {
+      "type": "header",
+      "content": "Marquee"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_marquee",
+      "label": "Show Scrolling Marquee",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "marquee_text",
+      "label": "Marquee Text (separate items with |)",
+      "default": "New Arrivals | Free Shipping Over $150 | Ethically Made | Premium Quality | Exclusive Designs"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policy",
+      "label": "Show Policy Links",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show Payment Icons",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 200,
+      "step": 8,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 100
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "nav_column",
+      "name": "Nav Column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Column Heading",
+          "default": "Shop"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "footer"
+        }
+      ]
+    },
+    {
+      "type": "newsletter_col",
+      "name": "Newsletter Column",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Column Heading",
+          "default": "Stay in Touch"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Subscribe to receive first access to new arrivals and exclusive offers."
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Input Placeholder",
+          "default": "Enter your email"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxury Footer",
+      "blocks": [
+        { "type": "nav_column" },
+        { "type": "nav_column" },
+        { "type": "newsletter_col" }
+      ]
+    }
+  ]
+}
+{% endschema %}
