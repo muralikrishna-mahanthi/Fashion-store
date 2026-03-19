@@ -1,0 +1,456 @@
+{%- style -%}
+  .animation-hero-{{ section.id }} {
+    position: relative;
+    width: 100%;
+    height: {{ section.settings.height_desktop }}vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+  }
+
+  @media screen and (max-width: 749px) {
+    .animation-hero-{{ section.id }} {
+      height: {{ section.settings.height_mobile }}vh;
+    }
+  }
+
+  .animation-hero__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%; /* Extra height for parallax */
+    object-fit: cover;
+    z-index: 1;
+    transform: translateY(0);
+    will-change: transform;
+    transition: transform 0.1s linear;
+  }
+
+  .animation-hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, {{ section.settings.overlay_opacity | divided_by: 100.0 }});
+    z-index: 2;
+  }
+
+  .animation-hero__content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    max-width: 800px;
+    padding: 20px;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+  }
+
+  .animation-hero__content.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Blocks Styling */
+  .hero-block--heading {
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .hero-block--text {
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-block--buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-button {
+    text-decoration: none;
+    padding: 1.2rem 3rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid transparent;
+  }
+
+  .hero-button--primary {
+    background: #fff;
+    color: #000;
+  }
+
+  .hero-button--secondary {
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+  }
+
+  /* Premium Hover Animations */
+  .hero-button--slide:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+
+  .hero-button--glow:hover {
+    box-shadow: 0 0 15px rgba(255,255,255,0.6);
+  }
+
+  .hero-button--scale:hover {
+    transform: scale(1.05);
+  }
+
+  .hero-button--reveal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.1);
+    transition: left 0.5s ease;
+  }
+
+  .hero-button--reveal:hover::before {
+    left: 100%;
+  }
+
+{%- endstyle -%}
+
+<section class="animation-hero-{{ section.id }}" id="Hero-{{ section.id }}">
+  {%- if section.settings.image_desktop != blank -%}
+    <img
+      src="{{ section.settings.image_desktop | image_url: width: 2000 }}"
+      class="animation-hero__bg desktop-only"
+      alt="{{ section.settings.image_desktop.alt | escape }}"
+      loading="eager"
+      id="Bg-{{ section.id }}"
+    >
+  {%- else -%}
+    <img
+      src="https://images.unsplash.com/photo-1539109132314-34a77ae68c4a?q=80&w=1974&auto=format&fit=crop"
+      class="animation-hero__bg desktop-only"
+      alt="Placeholder"
+      loading="eager"
+      id="Bg-{{ section.id }}"
+    >
+  {%- endif -%}
+
+  {%- if section.settings.image_mobile != blank -%}
+    <img
+      src="{{ section.settings.image_mobile | image_url: width: 800 }}"
+      class="animation-hero__bg mobile-only"
+      alt="{{ section.settings.image_mobile.alt | escape }}"
+      loading="eager"
+    >
+  {%- else -%}
+    <img
+      src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920&auto=format&auto=format&fit=crop"
+      class="animation-hero__bg mobile-only"
+      alt="Placeholder"
+      loading="eager"
+    >
+  {%- endif -%}
+
+  <div class="animation-hero__overlay"></div>
+
+  <div class="animation-hero__content" id="Content-{{ section.id }}">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'heading' -%}
+          <h2 class="hero-block--heading h1" {{ block.shopify_attributes }} style="
+            color: {{ block.settings.text_color }};
+            font-size: {{ block.settings.font_size }}px;
+            {%- if block.settings.font_family == 'serif' -%}font-family: 'Playfair Display', serif;{%- elsif block.settings.font_family == 'monospace' -%}font-family: 'Courier New', Courier, monospace;{%- endif -%}
+          ">
+            {{ block.settings.heading }}
+          </h2>
+        {%- when 'text' -%}
+          <div class="hero-block--text p" {{ block.shopify_attributes }} style="
+            color: {{ block.settings.text_color }};
+            font-size: {{ block.settings.font_size }}px;
+            {%- if block.settings.font_family == 'serif' -%}font-family: 'Playfair Display', serif;{%- elsif block.settings.font_family == 'monospace' -%}font-family: 'Courier New', Courier, monospace;{%- endif -%}
+          ">
+            {{ block.settings.text }}
+          </div>
+        {%- when 'button' -%}
+          <div class="hero-block--buttons" {{ block.shopify_attributes }}>
+            <a href="{{ block.settings.link }}" class="hero-button hero-button--{{ block.settings.button_style }} hero-button--{{ block.settings.hover_animation }}">
+              {{ block.settings.label }}
+            </a>
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+<script>
+  (function() {
+    const sectionId = '{{ section.id }}';
+    const hero = document.getElementById('Hero-' + sectionId);
+    const bg = document.getElementById('Bg-' + sectionId);
+    const content = document.getElementById('Content-' + sectionId);
+    const parallaxSpeed = {{ section.settings.parallax_speed | default: 0.5 }};
+
+    let ticking = false;
+    let lastScrollY = window.pageYOffset;
+
+    function updateParallax() {
+      const heroRect = hero.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // Only animate if hero is partially in view
+      if (heroRect.bottom > 0 && heroRect.top < viewportHeight) {
+        // Calculate transition: how far the hero has moved relative to the viewport
+        // This makes the transition feel centered
+        const heroCenter = heroRect.top + (heroRect.height / 2);
+        const viewportCenter = viewportHeight / 2;
+        const offset = (heroCenter - viewportCenter) * parallaxSpeed;
+        
+        if (bg) bg.style.transform = `translate3d(0, ${offset}px, 0)`;
+      }
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      lastScrollY = window.pageYOffset;
+      if (!ticking) {
+        window.requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    });
+
+    // Initial call
+    updateParallax();
+
+    // Intersection Observer for Reveal content
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          content.classList.add('is-visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    observer.observe(hero);
+  })();
+</script>
+
+<style>
+  .desktop-only { display: block; }
+  .mobile-only { display: none; }
+
+  @media screen and (max-width: 749px) {
+    .desktop-only { display: none; }
+    .mobile-only { display: block; }
+    .hero-block--heading { font-size: 3.5rem !important; }
+    .hero-block--text { font-size: 1.4rem !important; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Animation Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Desktop Height",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Mobile Height",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 10,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "parallax_speed",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Parallax Speed",
+      "default": 0.3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Elevate Your Style"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 20,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Font Size",
+          "default": 64
+        },
+        {
+          "type": "select",
+          "id": "font_family",
+          "label": "Font Family",
+          "options": [
+            { "value": "serif", "label": "Serif" },
+            { "value": "sans-serif", "label": "Sans Serif" },
+            { "value": "monospace", "label": "Monospace" }
+          ],
+          "default": "serif"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Experience the pinnacle of high-fashion design with our spring collection."
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 12,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Font Size",
+          "default": 18
+        },
+        {
+          "type": "select",
+          "id": "font_family",
+          "label": "Font Family",
+          "options": [
+            { "value": "serif", "label": "Serif" },
+            { "value": "sans-serif", "label": "Sans Serif" },
+            { "value": "monospace", "label": "Monospace" }
+          ],
+          "default": "sans-serif"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Button Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button Link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button Style",
+          "options": [
+            { "value": "primary", "label": "Primary (Solid white)" },
+            { "value": "secondary", "label": "Secondary (Outline)" }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "select",
+          "id": "hover_animation",
+          "label": "Hover Animation",
+          "options": [
+            { "value": "slide", "label": "Slide Up" },
+            { "value": "glow", "label": "Glow" },
+            { "value": "scale", "label": "Scale" },
+            { "value": "reveal", "label": "Reveal Shine" }
+          ],
+          "default": "reveal"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Animation Hero",
+      "blocks": [
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "button" }
+      ]
+    }
+  ]
+}
+{% endschema %}
