@@ -137,8 +137,10 @@
         {%- endfor -%}
       {%- else -%}
         {%- for i in (1..section.settings.products_to_show) -%}
+          {%- assign placeholder_index = i | modulo: 6 -%}
+          {%- if placeholder_index == 0 -%}{%- assign placeholder_index = 6 -%}{%- endif -%}
           <div class="glass-card">
-            {{ 'product-' | append: i | placeholder_svg_tag: 'glass-card__image' }}
+            {{ 'product-' | append: placeholder_index | placeholder_svg_tag: 'glass-card__image' }}
             <div class="glass-card__info">
               <h3 class="glass-card__title">Sample Product {{ i }}</h3>
               <div class="glass-card__price">$99.00</div>
