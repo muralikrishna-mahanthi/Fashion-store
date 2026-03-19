@@ -369,7 +369,8 @@
     <div class="lux-footer__brand">
       {%- if settings.logo != blank -%}
         <div style="margin-bottom: 2rem;">
-          {{ settings.logo | image_url: width: 300 | image_tag: loading: 'lazy', style: 'height: 40px; width: auto;' }}
+          {%- assign logo_url = settings.logo | image_url: width: 300 -%}
+          <img src="{{ logo_url }}" loading="lazy" style="height: 40px; width: auto;" alt="{{ shop.name }}">
         </div>
       {%- else -%}
         <div class="lux-footer__brand-name js-footer-reveal">{{ shop.name }}</div>
@@ -664,6 +665,9 @@
       ]
     }
   ],
+  "enabled_on": {
+    "groups": ["footer"]
+  },
   "presets": [
     {
       "name": "Luxury Footer",

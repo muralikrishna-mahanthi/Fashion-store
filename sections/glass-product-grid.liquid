@@ -117,7 +117,7 @@
       {%- assign collection = collections[section.settings.collection] -%}
       {%- if collection != blank -%}
         {%- for product in collection.products limit: section.settings.products_to_show -%}
-          <div class="glass-card" {{ block.shopify_attributes }}>
+          <div class="glass-card">
             <a href="{{ product.url }}" style="text-decoration: none;">
               {% if product.featured_media != blank %}
                 <img src="{{ product.featured_media | image_url: width: 600 }}" class="glass-card__image" loading="lazy" alt="{{ product.title }}">
@@ -235,6 +235,9 @@
       "default": 80
     }
   ],
+  "enabled_on": {
+    "templates": ["index", "collection", "page", "search", "product"]
+  },
   "presets": [
     {
       "name": "Glass Product Grid"
