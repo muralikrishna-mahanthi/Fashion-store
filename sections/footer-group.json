@@ -1,1 +1,54 @@
-{"name":"t:sections.footer.name","type":"footer","sections":{"footer":{"type":"footer","settings":{"color_scheme":"scheme-1","newsletter_enable":true,"newsletter_heading":"Subscribe to our emails","enable_follow_on_shop":true,"show_social":true,"enable_country_selector":true,"enable_language_selector":true,"payment_enable":true,"show_policy":true,"margin_top":0,"padding_top":36,"padding_bottom":36}}},"order":["footer"]}
+{
+  "name": "Footer",
+  "type": "footer",
+  "sections": {
+    "luxury-footer": {
+      "type": "luxury-footer",
+      "blocks": {
+        "nav_col_shop": {
+          "type": "nav_column",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu"
+          }
+        },
+        "nav_col_help": {
+          "type": "nav_column",
+          "settings": {
+            "heading": "Help",
+            "menu": "footer"
+          }
+        },
+        "newsletter_col": {
+          "type": "newsletter_col",
+          "settings": {
+            "heading": "Stay in Touch",
+            "text": "Subscribe to receive first access to new arrivals and exclusive offers.",
+            "placeholder": "Enter your email"
+          }
+        }
+      },
+      "block_order": [
+        "nav_col_shop",
+        "nav_col_help",
+        "newsletter_col"
+      ],
+      "settings": {
+        "brand_desc": "Curated fashion for those who dare to stand out. Quality meets artistry in every piece.",
+        "show_wordmark": true,
+        "wordmark_text": "",
+        "show_marquee": true,
+        "marquee_text": "New Arrivals | Free Shipping Over $150 | Ethically Made | Premium Quality | Exclusive Designs",
+        "bg_color": "#0a0a0a",
+        "text_color": "#ffffff",
+        "link_color": "#ffffff",
+        "show_policy": true,
+        "show_payment_icons": true,
+        "padding_top": 100
+      }
+    }
+  },
+  "order": [
+    "luxury-footer"
+  ]
+}
