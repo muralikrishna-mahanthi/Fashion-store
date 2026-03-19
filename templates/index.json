@@ -9,6 +9,52 @@
  */
 {
   "sections": {
+    "animation_hero_K6FdfC": {
+      "type": "animation-hero",
+      "blocks": {
+        "heading_9MxbmM": {
+          "type": "heading",
+          "settings": {
+            "heading": "Elevate Your Style",
+            "text_color": "#ffffff",
+            "font_size": 64,
+            "font_family": "sans-serif"
+          }
+        },
+        "text_wdmAgm": {
+          "type": "text",
+          "settings": {
+            "text": "Experience the pinnacle of high-fashion design with our spring collection.",
+            "text_color": "#ffffff",
+            "font_size": 18,
+            "font_family": "sans-serif"
+          }
+        },
+        "button_mzNHDY": {
+          "type": "button",
+          "settings": {
+            "label": "Shop Now",
+            "link": "shopify://collections/sweaters",
+            "button_style": "primary",
+            "hover_animation": "reveal"
+          }
+        }
+      },
+      "block_order": [
+        "heading_9MxbmM",
+        "text_wdmAgm",
+        "button_mzNHDY"
+      ],
+      "name": "Animation Hero",
+      "settings": {
+        "image_desktop": "shopify://shop_images/woman-cross-legged-with-her-eyes-closed.jpg",
+        "image_mobile": "shopify://shop_images/Untitled_Project_-_illustrationImage.jpg",
+        "height_desktop": 100,
+        "height_mobile": 100,
+        "overlay_opacity": 80,
+        "parallax_speed": 0.2
+      }
+    },
     "image_banner": {
       "type": "image-banner",
       "blocks": {
@@ -74,50 +120,6 @@
         "swipe_on_mobile": false,
         "padding_top": 44,
         "padding_bottom": 36
-      }
-    },
-    "animation_hero_K6FdfC": {
-      "type": "animation-hero",
-      "blocks": {
-        "heading_9MxbmM": {
-          "type": "heading",
-          "settings": {
-            "heading": "Elevate Your Style",
-            "text_color": "#ffffff",
-            "font_size": 64,
-            "font_family": "serif"
-          }
-        },
-        "text_wdmAgm": {
-          "type": "text",
-          "settings": {
-            "text": "Experience the pinnacle of high-fashion design with our spring collection.",
-            "text_color": "#ffffff",
-            "font_size": 18,
-            "font_family": "sans-serif"
-          }
-        },
-        "button_mzNHDY": {
-          "type": "button",
-          "settings": {
-            "label": "Shop Now",
-            "link": "",
-            "button_style": "primary",
-            "hover_animation": "reveal"
-          }
-        }
-      },
-      "block_order": [
-        "heading_9MxbmM",
-        "text_wdmAgm",
-        "button_mzNHDY"
-      ],
-      "name": "Animation Hero",
-      "settings": {
-        "height_desktop": 100,
-        "height_mobile": 80,
-        "overlay_opacity": 30,
-        "parallax_speed": 0.3
       }
     }
   },
